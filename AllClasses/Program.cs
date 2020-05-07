@@ -172,7 +172,7 @@ namespace memory_management_project
                 }
 
                 Hole check;
-                if (sizeofholes > sizeofsegments) 
+                if (sizeofholes >= sizeofsegments) 
                 {
                     // Console.WriteLine("enteringg");
                     for (int i = 0; i < a.listofsegments.Count; i++)
