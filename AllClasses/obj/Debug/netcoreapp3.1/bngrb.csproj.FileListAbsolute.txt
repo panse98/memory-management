@@ -1,0 +1,13 @@
+D:\OSproject\bngrb\bin\Debug\netcoreapp3.1\bngrb.exe
+D:\OSproject\bngrb\bin\Debug\netcoreapp3.1\bngrb.deps.json
+D:\OSproject\bngrb\bin\Debug\netcoreapp3.1\bngrb.runtimeconfig.json
+D:\OSproject\bngrb\bin\Debug\netcoreapp3.1\bngrb.runtimeconfig.dev.json
+D:\OSproject\bngrb\bin\Debug\netcoreapp3.1\bngrb.dll
+D:\OSproject\bngrb\bin\Debug\netcoreapp3.1\bngrb.pdb
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.csprojAssemblyReference.cache
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.csproj.CoreCompileInputs.cache
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.AssemblyInfoInputs.cache
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.AssemblyInfo.cs
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.dll
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.pdb
+D:\OSproject\bngrb\obj\Debug\netcoreapp3.1\bngrb.genruntimeconfig.cache
