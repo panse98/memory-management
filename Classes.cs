@@ -51,18 +51,18 @@ namespace memory_management_project
 
     public class SegmentTable
     {
-        public int indexofsegment;
+        public string indexofsegment;
         public int baseaddress;
         public int limit;
 
         public SegmentTable()
         {
-            indexofsegment = 0;
+            indexofsegment = "0";
             baseaddress = 0;
             limit = 0;
         }
 
-        public SegmentTable(int a, int b, int c)
+        public SegmentTable(string a, int b, int c)
         {
             indexofsegment = a;
             baseaddress = b;
@@ -125,11 +125,6 @@ namespace memory_management_project
             }
         }
 
-        public void SegmentTable()
-        {
-
-        }
-
         public void Firstinput()
         {
             int arranger = 0;
@@ -152,7 +147,7 @@ namespace memory_management_project
                 finalOutput.Add(new FinalTable("allocated", "unknownprocess" + j + 1, arranger, totalmemorysize));
         }
 
-        public void Isfit(Process a)
+        public bool Isfit(Process a)
         {
             int sizeofholes = 0;
             int sizeofsegments = 0;
@@ -160,40 +155,34 @@ namespace memory_management_project
             for (int i = 0; i < inputholes.Count; i++)
             {
                 sizeofholes += inputholes[i].size;
-                //   Console.WriteLine("holesssssssss");
             }
 
             for (int i = 0; i < a.numofsegments; i++)
             {
                 sizeofsegments += a.listofsegments[i].size;
-                //  Console.WriteLine("segments");
             }
 
             Hole check;
-            if (sizeofholes > sizeofsegments)
+            if (sizeofholes >= sizeofsegments)
             {
-                // Console.WriteLine("enteringg");
                 for (int i = 0; i < a.listofsegments.Count; i++)
                 {
                     int r = a.listofsegments[i].size;
                     check = inputholes.Find(x => x.size >= r);
-                    Console.WriteLine("calcu");
                     if (check.size == -1)
                     {
-                        Console.WriteLine("This process can't fit in memory"); //lma n link han call function deallocate
+                        
                         pendingprocess.Add(a);
-                        break;
+                        return false;
                     }
-                    else
-                    {
-                        Console.WriteLine("This process will fit in memory");   // hanshelha lma nlink bs han-test beeha now
-                    }
-                }
 
+                }
+                return true;
             }
             else
             {
-                Console.WriteLine("This process can't fit in memory"); //lma n link han call function deallocate
+                return false;
+
             }
         }
 
