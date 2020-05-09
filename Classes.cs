@@ -95,7 +95,7 @@ namespace memory_management_project
             this.id = id;
             startAddress = s;
             endAddress = e;
-            this.size = s - e;
+            this.size = e - s;
         }
     }
 
