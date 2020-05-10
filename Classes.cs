@@ -147,7 +147,7 @@ namespace memory_management_project
                 finalOutput.Add(new FinalTable("allocated", "unknownprocess" + j, arranger, totalmemorysize));
         }
 
-        public bool Isfit(Process a)
+        public bool Isfit(Process a, string typeofallocation)
         {
             int sizeofholes = 0;
             int sizeofsegments = 0;
@@ -170,30 +170,129 @@ namespace memory_management_project
 
             if (sizeofholes >= sizeofsegments)
             {
-                for (int i = 0; i < segmentsforchecking.Count; i++)
+                if (typeofallocation == "first fit")
                 {
-                    for (int j = 0; j < listforchecking.Count; j++)
+                    for (int i = 0; i < segmentsforchecking.Count; i++)
                     {
-
-                        if (listforchecking[j].label == "holes" && listforchecking[j].size >= segmentsforchecking[i].size)
+                        for (int j = 0; j < listforchecking.Count; j++)
                         {
-                            listforchecking.RemoveAt(j);
-                            check = true;
-                            break;
+                           
+                            if (listforchecking[j].label == "holes" && listforchecking[j].size == segmentsforchecking[i].size)
+                            {
+                                listforchecking.RemoveAt(j);
+                                check = true;
+                                break;
+
+                            }
+                            if (listforchecking[j].label == "holes" && listforchecking[j].size > segmentsforchecking[i].size)
+                            {
+                                
+                                listforchecking.Add(new FinalTable("holes", "new hole" + j, listforchecking[j].startAddress + segmentsforchecking[i].size, listforchecking[j].endAddress));                            
+                                listforchecking.RemoveAt(j);
+                                listforchecking = listforchecking.OrderBy(s => s.startAddress).ToList();
+                                check = true;
+                                break;
+
+                            }
+                            check = false;
+                        }
+                        if (check == false)
+                        {
+                            pendingprocess.Add(a);
+                            return false;
+
 
                         }
+
+
+
                     }
-                    if (check == false)
+                }
+                if (typeofallocation == "worst fit")
+                {
+                   // segmentsforchecking = segmentsforchecking.OrderByDescending(s => s.size).ToList();
+                    for (int i = 0; i < segmentsforchecking.Count; i++)
                     {
-                        pendingprocess.Add(a);
-                        return false;
+                        for (int j = 0; j < listforchecking.Count; j++)
+                        {
+                            listforchecking = listforchecking.OrderByDescending(s => s.size).ToList();
+
+                            if (listforchecking[j].label == "holes" && listforchecking[j].size == segmentsforchecking[i].size)
+                            {
+                                listforchecking.RemoveAt(j);
+                                check = true;
+                                break;
+
+                            }
+                            if (listforchecking[j].label == "holes" && listforchecking[j].size > segmentsforchecking[i].size)
+                            {
+                                
+                                listforchecking.Add(new FinalTable("holes", "new hole" + j, listforchecking[j].startAddress + segmentsforchecking[i].size, listforchecking[j].endAddress));
+                                listforchecking.RemoveAt(j);
+                                check = true;
+                                break;
+
+                            }
+                            check = false;
+                        }
+                        if (check == false)
+                        {
+                            pendingprocess.Add(a);
+                            return false;
+
+
+                        }
+
+
+
                     }
+                }
+                if (typeofallocation == "best fit")
+                {
+                   // listforchecking = listforchecking.OrderBy(s => s.size).ToList();
+                  //  segmentsforchecking = segmentsforchecking.OrderByDescending(s => s.size).ToList();
+                    for (int i = 0; i < segmentsforchecking.Count; i++)
+                    {
+                        for (int j = 0; j < listforchecking.Count; j++)
+                        {
+                            listforchecking = listforchecking.OrderBy(s => s.size).ToList();
+
+                            if (listforchecking[j].label == "holes" && listforchecking[j].size == segmentsforchecking[i].size)
+                            {
+                                listforchecking.RemoveAt(j);
+                                check = true;
+                                break;
+
+                            }
+                            if (listforchecking[j].label == "holes" && listforchecking[j].size > segmentsforchecking[i].size)
+                            {
+
+                                listforchecking.Add(new FinalTable("holes", "new hole" + j, listforchecking[j].startAddress + segmentsforchecking[i].size, listforchecking[j].endAddress));
+                                listforchecking.RemoveAt(j);
+                                check = true;
+                                break;
+
+                            }
+                            check = false;
+                        }
+                        if (check == false)
+                        {
+                            pendingprocess.Add(a);
+                            return false;
+
+
+                        }
 
 
 
+                    }
                 }
 
-                return true;
+                if (check == true)
+                { return true; }
+                else
+                    return false;
+                
             }
             else
             {
@@ -202,6 +301,171 @@ namespace memory_management_project
             }
         }
 
+        public void Firstfit(Process p)
 
+        {
+            for (int i = 0; i < p.listofsegments.Count; i++)
+            {
+                for (int j = 0; j < finalOutput.Count; j++)
+                {
+                    if (p.listofsegments[i].size < (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start/*finalOutput[j].startAddress*/, (start/*finalOutput[j].startAddress*/+ p.listofsegments[i].size)));
+                        // finalOutput.Add(new FinalTable(p.processname, p.listofsegments[i].segmentname, start/*finalOutput[j].startAddress*/, (start/*finalOutput[j].startAddress*/+p.listofsegments[i].size )));
+                        start += p.listofsegments[i].size;
+                        finalOutput.Insert(j + 1, new FinalTable("holes", " HOLE" + (j).ToString(), start /*finalOutput[j].startAddress*//* += p.listofsegments[i].size*/, end /*finalOutput[j].endAddress*/));
+
+                        break;
+                    }
+                    else if (p.listofsegments[i].size == (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start/*finalOutput[j].startAddress*/, (start/*finalOutput[j].startAddress*/+ p.listofsegments[i].size)));
+
+
+                        break;
+
+                    }
+                }
+            }
+        }
+
+        public void Bestfit(Process p)
+        {
+
+            //   var group= from s in finalOutput
+            //                    group s by s.label = "holes";
+
+            //group = group.OrderBy(s=>s ).ToList();
+            p.listofsegments = p.listofsegments.OrderBy(s => s.size).ToList();
+            for (int i = 0; i < p.listofsegments.Count; i++)
+            {
+                for (int j = 0; j < finalOutput.Count; j++)
+                {
+                    finalOutput = finalOutput.OrderBy(s => (s.endAddress - s.startAddress)).ToList();
+
+                    if (p.listofsegments[i].size < (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
+
+                        start += p.listofsegments[i].size;
+                        finalOutput.Insert(j + 1, new FinalTable("holes", " HOLE" + (j).ToString(), start, end));
+
+                        break;
+                    }
+                    else if (p.listofsegments[i].size == (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
+
+
+                        break;
+
+                    }
+                }
+            }
+            // reem 2alt dh 
+            finalOutput = finalOutput.OrderBy(s => s.startAddress).ToList();
+        }
+
+        public void Worstfit(Process p)
+        {
+            for (int i = 0; i < p.listofsegments.Count; i++)
+            {
+                for (int j = 0; j < finalOutput.Count; j++)
+                {
+                    finalOutput = finalOutput.OrderByDescending(s => (s.endAddress - s.startAddress)).ToList();
+
+                    if (p.listofsegments[i].size < (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
+
+                        start += p.listofsegments[i].size;
+                        finalOutput.Insert(j + 1, new FinalTable("holes", " HOLE" + (j).ToString(), start, end));
+
+                        break;
+                    }
+                    else if (p.listofsegments[i].size == (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
+
+
+                        break;
+
+                    }
+                }
+
+            }
+            finalOutput = finalOutput.OrderBy(s => s.startAddress).ToList();
+
+        }
+
+        public void Setsegmenttable()   // baktb bs fkra gatly ( 3arfa enha  3 looops w msh sah kda ) 
+        {
+            for (int i = 0; i < inputprocesses.Count; i++)
+            {
+                for (int j = 0; j < finalOutput.Count; j++)
+                {
+                    for (int k = 0; k < inputprocesses[i].listofsegments.Count; k++)
+                    {
+                        if (inputprocesses[i].processname + inputprocesses[i].listofsegments[k].segmentname == finalOutput[j].id)
+                        {
+                            inputprocesses[i].storedtable.Add(new SegmentTable(inputprocesses[i].listofsegments[k].segmentname, finalOutput[j].startAddress, finalOutput[j].size));
+                        }
+
+                    }
+                }
+                inputprocesses[i].storedtable = inputprocesses[i].storedtable.OrderBy(s => s.baseaddress).ToList();
+            }
+
+
+        }
+
+        public void Showsegmenttable(string a) // bgrb bs m3rfsh sah wla la hn7tg n testha 
+        {
+            for (int i = 0; i < inputprocesses.Count; i++)
+            {
+                if (a == inputprocesses[i].processname)
+                {
+                    for (int j = 0; j < inputprocesses[i].storedtable.Count; j++) // fel gui han3ml table or msg box
+                    {
+                        Console.WriteLine("{0}:base={1},limit={2}", inputprocesses[i].storedtable[j].indexofsegment, inputprocesses[i].storedtable[j].baseaddress, inputprocesses[i].storedtable[j].limit);
+                    }
+                }
+            }
+        }
     }
+
 }
+
