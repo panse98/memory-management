@@ -217,11 +217,8 @@ namespace ConsoleApp1
                             finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start/*finalOutput[j].startAddress*/, (start/*finalOutput[j].startAddress*/+ p.listofsegments[i].size)));
                             // finalOutput.Add(new FinalTable(p.processname, p.listofsegments[i].segmentname, start/*finalOutput[j].startAddress*/, (start/*finalOutput[j].startAddress*/+p.listofsegments[i].size )));
                             start += p.listofsegments[i].size;
-                            finalOutput.Insert(j + 1, new FinalTable("hole", " HOLE" + (j).ToString(), start /*finalOutput[j].startAddress*//* += p.listofsegments[i].size*/, end /*finalOutput[j].endAddress*/));
-                            //finalOutput.Add(new FinalTable("hole", " HOLE"+(j).ToString(),start /*finalOutput[j].startAddress*//* += p.listofsegments[i].size*/,end /*finalOutput[j].endAddress*/));
-
-                          //  finalOutput = finalOutput.OrderBy(s => s.startAddress).ToList();
-
+                            finalOutput.Insert(j + 1, new FinalTable("holes", " HOLE" + (j).ToString(), start /*finalOutput[j].startAddress*//* += p.listofsegments[i].size*/, end /*finalOutput[j].endAddress*/));
+                          
                             break;
                         }
                         else if (p.listofsegments[i].size == (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
@@ -245,6 +242,49 @@ namespace ConsoleApp1
             public void Bestfit(Process p)
             {
 
+                //   var group= from s in finalOutput
+                //                    group s by s.label = "holes";
+
+                //group = group.OrderBy(s=>s ).ToList();
+               
+                for (int i = 0; i < p.listofsegments.Count; i++)
+                {
+                    for (int j = 0; j < finalOutput.Count; j++)
+                    {
+                        finalOutput = finalOutput.OrderBy(s => (s.endAddress - s.startAddress)).ToList();
+
+                        if (p.listofsegments[i].size < (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+                        {
+                            int start, end;
+
+                            start = finalOutput[j].startAddress;
+                            end = finalOutput[j].endAddress;
+                            finalOutput.Remove(finalOutput[j]);
+                            finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start+ p.listofsegments[i].size)));
+                         
+                            start += p.listofsegments[i].size;
+                            finalOutput.Insert(j + 1, new FinalTable("hole", " HOLE" + (j).ToString(), start , end ));
+                          
+                            break;
+                        }
+                        else if (p.listofsegments[i].size == (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+
+                        {
+                            int start, end;
+
+                            start = finalOutput[j].startAddress;
+                            end = finalOutput[j].endAddress;
+                            finalOutput.Remove(finalOutput[j]);
+                            finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start+ p.listofsegments[i].size)));
+
+
+                            break;
+
+                        }
+                    }
+                }
+                // reem 2alt dh 
+              finalOutput= finalOutput.OrderBy(s => s.startAddress).ToList();
             }
 
 
@@ -258,13 +298,13 @@ namespace ConsoleApp1
             string processnames = Console.ReadLine();
             //holes
             Hole hole1 = new Hole();
-            hole1.size = 3;
+            hole1.size = 7;
             hole1.startingaddress = 1;
             inputholes.Add(hole1);
 
             Hole hole2 = new Hole();
-            hole2.size = 7;
-            hole2.startingaddress = 5;
+            hole2.size = 3;
+            hole2.startingaddress = 10;
             inputholes.Add(hole2);
 
             //Hole hole3 = new Hole();
@@ -272,20 +312,23 @@ namespace ConsoleApp1
             //hole3.startingaddress = 20;
             //inputholes.Add(hole3);
 
-            Management alaa = new Management();
-            alaa.Firstinput();
+            Management manage = new Management();
+            manage.Firstinput();
 
           
             Process reem = new Process();
             reem.processname = processnames;
             reem.numofsegments = 2;
-            reem.listofsegments.Add(new Segment(2, "s1"));
+            reem.listofsegments.Add(new Segment(1, "s1"));
             reem.listofsegments.Add(new Segment(6, "s2"));
-           //  alaa.Isfit(reem);
+            //alaa.Isfit(reem);
 
-            alaa.Firstfit(reem);
+            // manage.Firstfit(reem);
+            manage.Bestfit(reem);
+        
             foreach (var x in finalOutput)
-                Console.WriteLine(" {0}  {1} start {2} end {3}",x.label , x.id, x.startAddress, x.endAddress);
+              
+            Console.WriteLine(" {0}  {1} start {2} end {3}",x.label , x.id, x.startAddress, x.endAddress);
 
             Console.ReadKey();
 
