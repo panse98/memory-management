@@ -246,7 +246,7 @@ namespace ConsoleApp1
                 //                    group s by s.label = "holes";
 
                 //group = group.OrderBy(s=>s ).ToList();
-
+                p.listofsegments = p.listofsegments.OrderBy(s => s.size).ToList();
                 for (int i = 0; i < p.listofsegments.Count; i++)
                 {
                     for (int j = 0; j < finalOutput.Count; j++)
@@ -368,13 +368,13 @@ namespace ConsoleApp1
             Process reem = new Process();
             reem.processname = processnames;
             reem.numofsegments = 2;
-            reem.listofsegments.Add(new Segment(2, "s1"));
-            reem.listofsegments.Add(new Segment(5, "s2"));
+            reem.listofsegments.Add(new Segment(5, "s1"));
+            reem.listofsegments.Add(new Segment(2, "s2"));
             //alaa.Isfit(reem);
 
             // manage.Firstfit(reem);
-             manage.Bestfit(reem);
-          //  manage.Worstfit(reem);
+          //   manage.Bestfit(reem);
+           manage.Worstfit(reem);
             foreach (var x in finalOutput)
 
                 Console.WriteLine(" {0}  {1} start {2} end {3}", x.label, x.id, x.startAddress, x.endAddress);
