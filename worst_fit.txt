@@ -305,7 +305,7 @@ namespace ConsoleApp1
                             finalOutput.Remove(finalOutput[j]);
                             finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
 
-                             p.storedtable.Add(new SegmentTable(p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+                             p.storedtable.Add(new SegmentTable(i,p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
 
                             start += p.listofsegments[i].size;
                             finalOutput.Insert(j + 1, new FinalTable("holes", " HOLE" + (j).ToString(), start, end));
@@ -322,7 +322,7 @@ namespace ConsoleApp1
                             finalOutput.Remove(finalOutput[j]);
                             finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
 
-                            p.storedtable.Add(new SegmentTable(p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+                            p.storedtable.Add(new SegmentTable(i,p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
                             
                             break;
 
