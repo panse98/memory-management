@@ -1,0 +1,14 @@
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\bin\Debug\memoryManagement.exe.config
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\bin\Debug\memoryManagement.exe
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\bin\Debug\memoryManagement.pdb
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.mainForm.resources
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.Properties.Resources.resources
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.csproj.GenerateResource.cache
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.csproj.CoreCompileInputs.cache
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.exe
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.pdb
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.memSize.resources
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.addHole.resources
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.myMessageBox.resources
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.chooseAllocationMessage.resources
+C:\Users\Baraa\source\repos\memoryManagement\memoryManagement\obj\Debug\memoryManagement.csprojResolveAssemblyReference.cache
