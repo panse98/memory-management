@@ -470,6 +470,7 @@ namespace memoryManagement
             }
             else
             {
+                 pendingprocess.Add(a);
                 return false;
 
             }
