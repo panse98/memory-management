@@ -62,20 +62,23 @@ namespace memory_management_project
 
     public class SegmentTable
     {
-        public string indexofsegment;
+        public int indexofsegment;
+        public string segmentname;
         public int baseaddress;
         public int limit;
 
         public SegmentTable()
         {
-            indexofsegment = "0";
+            indexofsegment = 0;
+            segmentname = "name"; 
             baseaddress = 0;
             limit = 0;
         }
 
-        public SegmentTable(string a, int b, int c)
+        public SegmentTable(int a, string name, int b, int c)
         {
             indexofsegment = a;
+            segmentname = name;
             baseaddress = b;
             limit = c;
 
@@ -145,12 +148,18 @@ namespace memory_management_project
         {
             int arranger = 0;
             int j = 0;
-
+            
             while (j < inputholes.Count) //condition y5lene a5ls lma l a5ls lma l holes t5ls
             {
                 if (arranger < inputholes[j].startingaddress)
                 {
-                    finalOutput.Add(new FinalTable("allocated", "unknownprocess" + j, arranger, inputholes[j].startingaddress));
+                    finalOutput.Add(new FinalTable("allocated" + j.ToString(), "unknownprocess" + j, arranger, inputholes[j].startingaddress));
+                    Process p = new Process();
+                    p.processname = "allocated" + j;
+                    p.numofsegments = 1;
+                    p.listofsegments.Add(new Segment("unknownprocess" + j, arranger - inputholes[j].startingaddress));
+                    inputprocesses.Add(p);
+                    
                 }
 
 
@@ -160,13 +169,16 @@ namespace memory_management_project
 
             }
             if (arranger != totalmemorysize)
-                finalOutput.Add(new FinalTable("allocated", "unknownprocess" + j, arranger, totalmemorysize));
+                finalOutput.Add(new FinalTable("allocated" + j, "unknownprocess" + j, arranger, totalmemorysize));
+            Process l = new Process();
+            l.processname = "allocated" + j;
+            l.numofsegments = 1;
+            l.listofsegments.Add(new Segment("unknownprocess" + j, arranger - totalmemorysize));
+            inputprocesses.Add(l);
+
         }
 
-
-
         public static void Firstfit(Process p)
-
         {
 
             for (int i = 0; i < p.listofsegments.Count; i++)
@@ -182,7 +194,7 @@ namespace memory_management_project
                         finalOutput.Remove(finalOutput[j]);
                         finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
                         
-                        p.storedtable.Add(new SegmentTable(p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+                        p.storedtable.Add(new SegmentTable(i,p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
                         
                         start += p.listofsegments[i].size;
                         finalOutput.Insert(j + 1, new FinalTable("holes", "HOLE" + (j).ToString(), start, end));
@@ -199,7 +211,7 @@ namespace memory_management_project
                         finalOutput.Remove(finalOutput[j]);
                         finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
 
-                        p.storedtable.Add(new SegmentTable(p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+                        p.storedtable.Add(new SegmentTable(i,p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
                         break;
 
                     }
@@ -207,7 +219,7 @@ namespace memory_management_project
             }
             inputprocesses.Add(p);
         }
-
+       
         public static void Bestfit(Process p)
         {
 
@@ -227,7 +239,7 @@ namespace memory_management_project
                         finalOutput.Remove(finalOutput[j]);
                         finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
 
-                        p.storedtable.Add(new SegmentTable(p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+                        p.storedtable.Add(new SegmentTable(i, p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
 
                         start += p.listofsegments[i].size;
                         finalOutput.Insert(j + 1, new FinalTable("holes", "HOLE" + (j).ToString(), start, end));
@@ -244,7 +256,7 @@ namespace memory_management_project
                         finalOutput.Remove(finalOutput[j]);
                         finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
 
-                        p.storedtable.Add(new SegmentTable(p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+                        p.storedtable.Add(new SegmentTable(i, p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
 
                         break;
 
@@ -256,8 +268,53 @@ namespace memory_management_project
             inputprocesses.Add(p);
         }
 
+        public static void Worstfit(Process p)
+        {
 
 
+            for (int i = 0; i < p.listofsegments.Count; i++)
+            {
+                for (int j = 0; j < finalOutput.Count; j++)
+                {
+                    finalOutput = finalOutput.OrderByDescending(s => (s.endAddress - s.startAddress)).ToList();
+
+                    if (p.listofsegments[i].size < (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
+
+                        p.storedtable.Add(new SegmentTable(i, p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+
+                        start += p.listofsegments[i].size;
+                        finalOutput.Insert(j + 1, new FinalTable("holes", " HOLE" + (j).ToString(), start, end));
+
+                        break;
+                    }
+                    else if (p.listofsegments[i].size == (finalOutput[j].endAddress - finalOutput[j].startAddress) && finalOutput[j].label == "holes")
+
+                    {
+                        int start, end;
+
+                        start = finalOutput[j].startAddress;
+                        end = finalOutput[j].endAddress;
+                        finalOutput.Remove(finalOutput[j]);
+                        finalOutput.Insert(j, new FinalTable(p.processname, p.listofsegments[i].segmentname, start, (start + p.listofsegments[i].size)));
+
+                        p.storedtable.Add(new SegmentTable(i, p.listofsegments[i].segmentname, start, p.listofsegments[i].size));
+
+                        break;
+
+                    }
+                }
+
+            }
+            finalOutput = finalOutput.OrderBy(s => s.startAddress).ToList();
+            inputprocesses.Add(p);
+        }
 
         public static bool Isfit(Process a, string typeofallocation)
         {
