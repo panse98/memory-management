@@ -22,7 +22,7 @@ after pressing run button memory layout will be displayed
 ------------------------------------------------------
 ![Screenshot (703)](https://user-images.githubusercontent.com/61027133/81751528-e9262400-94af-11ea-8118-60f0bb2bdd36.png)
 
-4-Start add your processes
+4-Start adding  your processes
 ------------------------
 ![Screenshot (704)](https://user-images.githubusercontent.com/61027133/81751597-05c25c00-94b0-11ea-98e4-0914861e2f39.png)
 
