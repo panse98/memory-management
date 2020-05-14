@@ -136,13 +136,14 @@ namespace memoryManagement
             inputholes = inputholes.OrderBy(s => s.startingaddress).ToList();
         }
         //this means we always have to always update list of holes
-        public static void BindingHoles()
+       public static void BindingHoles()
         {
             for (int i = 0; i < finalOutput.Count - 1; i++)
             {
                 if (finalOutput[i].label == finalOutput[i + 1].label && finalOutput[i].label == "holes")
                 {
                     finalOutput[i].endAddress = finalOutput[i + 1].endAddress;
+                    finalOutput[i].size = finalOutput[i].endAddress - finalOutput[i].startAddress;
                     finalOutput.RemoveAt(i + 1);
                 }
 
