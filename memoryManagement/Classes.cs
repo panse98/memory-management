@@ -47,6 +47,7 @@ namespace memoryManagement
     {
         public int startingaddress;
         public int size;
+        public string processname="holes";
 
         public Hole()
         {
