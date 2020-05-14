@@ -116,7 +116,7 @@ namespace memoryManagement
 
             if (Management.allocationType == null)
             {
-                ShowMessageBox();
+                ShowMessageBox("please choose allocation type first");
                 return;
             }
 
@@ -125,7 +125,7 @@ namespace memoryManagement
             //if user enter segment nuber as a negative number
             if (Math.Sign(Snum) == -1)
             {
-                ShowMessageBox();
+                ShowMessageBox("Size should be positive number");
             }
 
             Process P = new Process(Pname, Snum);
@@ -145,7 +145,7 @@ namespace memoryManagement
                 if (Management.Isfit(P, Management.allocationType))
                 {
                     switch (Management.allocationType)
-                    {
+                     {
                         case "first fit":
                             Management.Firstfit(P);
                             break;
@@ -155,7 +155,8 @@ namespace memoryManagement
                         case "worst fit":
                             Management.Worstfit(P);
                             break;
-                    }
+                     }
+                    drawMemory();
                 }
                 else
                 {
@@ -164,15 +165,13 @@ namespace memoryManagement
                     this.plPending.Visible = true;
                     DrawPendingList();
                 }
-                this.plAddProcess.Visible = false;
+               this.plAddProcess.Visible = false;
                 this.PLmemLayout.Visible = true;
-                this.plPending.Visible = true;
-                drawMemory();
 
             }
             else
             {
-                ShowMessageBox();
+               ShowMessageBox("please enter same number of segment ");
             }
 
             this.DGSegments.Rows.Clear();
@@ -183,6 +182,7 @@ namespace memoryManagement
         private void btnCloseProcess_Click(object sender, EventArgs e)
         {
             this.plAddProcess.Visible = false;
+            drawMemory();
         }
 
 
@@ -259,7 +259,7 @@ namespace memoryManagement
             Label p = sender as Label;
             string processName = p.Text;
 
-            Process P = Management.inputprocesses.Single(r => r.processname == processName);
+            Process P = Management.pendingprocess.Single(r => r.processname == processName);
             if (Management.Isfit(P, Management.allocationType))
             {
                 switch (Management.allocationType)
@@ -307,7 +307,7 @@ namespace memoryManagement
                 row.Cells[0].Value = processTodraw.storedtable[i].indexofsegment;
                 row.Cells[1].Value = processTodraw.storedtable[i].segmentname;
                 row.Cells[2].Value = processTodraw.storedtable[i].baseaddress;
-                row.Cells[2].Value = processTodraw.storedtable[i].limit;
+                row.Cells[3].Value = processTodraw.storedtable[i].limit;
                 dataGridView1.Rows.Add(row);
 
             }
