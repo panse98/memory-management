@@ -296,7 +296,9 @@ namespace memoryManagement
             this.dataGridView1.Rows.Clear();
             Panel p = sender as Panel;
             string name = p.Controls.OfType<Label>().Single(l => l.Name == "processName").Text;
-            if(name.Length>7)
+            if(name == "holes")
+                  return;
+            else if (name.Length>8)
             if ((name.Substring(0,9) == "allocated"))
                 return;
             Process processTodraw= Management.inputprocesses.Single(r => r.processname == name);
