@@ -328,7 +328,10 @@ namespace memoryManagement
 
             //to handle size of each segment
             float percentage = (Convert.ToSingle(segPanel.size) / Convert.ToSingle(Management.totalmemorysize));
-            new_seg.Size = new System.Drawing.Size(this.PLmemLayout.Size.Width, Convert.ToInt32(percentage * this.PLmemLayout.Height));
+            int ySize = Convert.ToInt32(percentage * this.PLmemLayout.Height);
+            if (ySize < 30)
+                ySize = 40;
+            new_seg.Size = new System.Drawing.Size(this.PLmemLayout.Size.Width, ySize);
             segPanel.nextLocationY = new_seg.Size.Height + newYlocation;
 
             new_seg.Location = new Point(0, newYlocation);
