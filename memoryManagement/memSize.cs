@@ -22,7 +22,7 @@ namespace memoryManagement
             int Size= Int32.Parse(this.txtMem.Text);
             if (Math.Sign(Size) == -1|| Math.Sign(Size) == 0)
             {
-                ShowMessageBox();
+                ShowMessageBox("memory size should be greater than zero");
             }
             else {
                 Management.totalmemorysize = Size;
@@ -49,6 +49,7 @@ namespace memoryManagement
         public void ShowMessageBox()
         {
             myMessageBox box = new myMessageBox();
+            box.label1.Text = text;
             box.ShowDialog();
             return;
         }
